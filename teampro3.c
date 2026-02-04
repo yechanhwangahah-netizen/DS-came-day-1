@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 typedef struct TreeNode {
-    char carNAme[20];
+    char carName[20];
     int cost;
     struct TreeNode* left;
     struct TreeNode* right;
