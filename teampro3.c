@@ -7,3 +7,9 @@ typedef struct TreeNode {
     struct TreeNode* left;
     struct TreeNode* right;
 } TreeNode;
+
+TreeNode* createNode(int data);
+TreeNode* findMinNode(TreeNode* node);
+TreeNode* deleteBST(TreeNode* root, int key);
+TreeNode* insertBST(TreeNode* root, int key);
+TreeNode* searchBST(TreeNode* root, int key);
