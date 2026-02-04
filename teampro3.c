@@ -11,7 +11,7 @@ typedef struct TreeNode {
 void Menu();
 void displayAll(TreeNode* root);
 TreeNode* findMinNode(TreeNode* node);
-TreeNode* deleteBST(TreeNode* root, int key);
+TreeNode* deleteBST(TreeNode* root, int cost);
 TreeNode* insertBST(TreeNode* root, int key);
 TreeNode* searchBST(TreeNode* root, int key);
 
@@ -29,11 +29,11 @@ int main() {
         
         switch(menu){
             case 1:
-                pritnf("\n[매물 목록]\n");
+                pritnf("\n[ 매물 목록 ]\n");
                 displayAll(root);
                 break;
             case 2:
-                printf("차종 이름 입력: ");
+                printf("등록할 차종 이름 입력: ");
                 scanf("%s", name);
                 printf("가격 입력(만원): ");
                 scanf("%d", &cost);
@@ -45,7 +45,13 @@ int main() {
 
                 break;
             case 4:
-
+                printf("삭제할 차종 이름 입력: ");
+                scanf("%s", name);
+                printf("가격 입력(만원): ");
+                scanf("%d", &cost);
+                
+                deleteBST(root, cost);
+                printf("성공적으로 삭제되었습니다.\n");
                 break;
             case 0:
                 printf("앱을 종료합니다.\n");
@@ -72,6 +78,34 @@ TreeNode* createNode(char* name, int cost) {
     newNode->left = NULL;
     newNode->right = NULL;
     return newNode;
+}
+
+//삭제
+TreeNode* deleteBST(TreeNode* root, int cost) {
+    if (root == NULL) return root;
+    //2.삭제할 노드 찾기
+    if (cost < root->cost)
+        root->left = deleteBST(root->left, cost);
+    else if (cost > root->cost)
+        root->right = deleteBST(root->right, cost);
+
+    else {
+        if (root->left== NULL) {
+            TreeNode* temp = root->right;
+            free(root);
+            return temp;
+        } 
+        else if (root->right== NULL) {
+            TreeNode* temp = root->left;
+            free(root);
+            return temp;
+        }
+        TreeNode* temp = findMinNode(root->right);
+        root->cost = temp->cost;
+        
+        root->right = deleteBST(root->right,temp->cost);
+    }
+    return root;
 }
 
 
