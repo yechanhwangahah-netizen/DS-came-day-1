@@ -9,7 +9,7 @@ typedef struct TreeNode {
 } TreeNode;
 
 void Menu();
-TreeNode* createNode(int data);
+void displayAll(TreeNode* root);
 TreeNode* findMinNode(TreeNode* node);
 TreeNode* deleteBST(TreeNode* root, int key);
 TreeNode* insertBST(TreeNode* root, int key);
@@ -29,10 +29,17 @@ int main() {
         
         switch(menu){
             case 1:
-
+                pritnf("\n[매물 목록]\n");
+                displayAll(root);
                 break;
             case 2:
-                root = createNode(name, cost);
+                printf("차종 이름 입력: ");
+                scanf("%s", name);
+                printf("가격 입력(만원): ");
+                scanf("%d", &cost);
+                
+                root = insertBST(root,name, cost);
+                printf("성공적으로 등록되었습니다.\n");
                 break;
             case 3:
 
