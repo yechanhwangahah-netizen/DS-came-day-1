@@ -15,13 +15,14 @@ TreeNode* findMinNode(TreeNode* node);
 TreeNode* deleteBST(TreeNode* root, int cost);
 TreeNode* createNode(char* name, int cost);
 TreeNode* insertBST(TreeNode* root, char* name, int cost);
-TreeNode* searchBST(TreeNode* root, char* name);
+TreeNode* searchRange(TreeNode* root, int min, int max);
 
 int main() {
     printf("중고나라에 오신걸 환영합니다!\n");
     TreeNode* root = NULL;
     char name[20];
     int cost;
+    int min_price, max_price;
 
     while(1){
         int menu;
@@ -46,11 +47,13 @@ int main() {
                 printf("성공적으로 등록되었습니다.\n");
                 break;
             case 3:
-                printf("검색할 차종 이름 입력: >> ");
-                scanf("%s", name);
-                TreeNode* found = searchBST(root, name);
-                if(found) printf("찾은 매물: %s, 가격: %d만원\n", found->carName, found->cost);
-                else printf("해당 매물이 없습니다.\n");
+                printf("검색할 최소 가격 입력(만원): >> ");
+                scanf("%d", &min_price);
+                printf("검색할 최대 가격 입력(만원): >> ");
+                scanf("%d", &max_price);
+                
+                printf("\n[ %d만원 ~ %d만원 사이의 매물 ]\n", min_price, max_price);
+                searchRange(root, min_price, max_price);
                 break;
             case 4:
                 printf("삭제할 매물의 '가격' 입력: "); 
@@ -105,7 +108,7 @@ TreeNode* createNode(char* name, int cost) {
 TreeNode* insertBST(TreeNode* root, char* name, int cost) {
     if (root == NULL) return createNode(name, cost);
 
-    if (key < root->cost) {
+    if (cost < root->cost) {
         root->left = insertBST(root->left, name, cost);
     } else if (cost > root->cost) {
         root->right = insertBST(root->right, name, cost);
@@ -140,10 +143,13 @@ TreeNode* deleteBST(TreeNode* root, int cost) {
     return root;
 }
 
-TreeNode* searchBST(TreeNode* root, char* name){
-    if(root == NULL || strcmp(root->carName, name) == 0) return root;
-    TreeNode* result = searchBST(root->left, name);
-    if(result) return result;
-    return searchBST(root->right, name);
+void * searchRange(TreeNode* root, int min, int max){
+    if(root == NULL) return;
+
+    if(root->cost > min) searchRange(root->left, min, max);
+    if(root->cost >= min && root->cost <= max){
+        printf("차종: %-10s | 가격: %d만원\n", root->carName, root->cost);
+    }
+    if(root->cost < max) searchRange(root->right, min, max);
 }
 
