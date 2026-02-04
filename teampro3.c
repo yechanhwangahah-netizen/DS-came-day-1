@@ -8,6 +8,7 @@ typedef struct TreeNode {
     struct TreeNode* right;
 } TreeNode;
 
+void Menu(TreeNode* root);
 TreeNode* createNode(int data);
 TreeNode* findMinNode(TreeNode* node);
 TreeNode* deleteBST(TreeNode* root, int key);
@@ -29,6 +30,15 @@ int main() {
     }
 }
 
+void Menu(TreeNode* root){
+    printf("|-----------MENU------------|\n");
+    printf("1. 올라온 중고차 매물 확인하기\n");
+    printf("2. 중고차 매물 올리기\n");
+    printf("3. 내가 원하는 중고차 검색\n");
+    printf("4. 중고차 매물 삭제하기\n");
+    printf("|---------------------------|\n");
+
+}
 TreeNode* createNode(int data) {
     TreeNode* newNode = (TreeNode*)malloc(sizeof(TreeNode));
     newNode->data = data;
