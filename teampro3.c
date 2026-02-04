@@ -38,3 +38,54 @@ TreeNode* createNode(int data) {
 }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+TreeNode* deleteBST(TreeNode* root, int cost) {
+    //트리가 비어있으면 종료
+    if (root == NULL) return root;
+    //삭제할 노드 찾기
+    if (cost < root->cost)
+        root->left = deleteBST(root->left, cost);
+    else if (cost > root->cost)
+        root->right = deleteBST(root->right, cost);
+    else {
+      
+        if (root->left == NULL) {
+            TreeNode* temp = root->right;
+            free(root);
+            return temp;
+        } else if (root->right == NULL) {
+            TreeNode* temp = root->left;
+            free(root);
+            return temp;
+        }
+      
+        TreeNode* temp = findMinNode(root->right);
+        root->cost = temp->cost;
+        strcpy(root->carName, temp->carName);
+        root->right = deleteBST(root->right, temp->cost);
+    }
+    return root;
+}
+
+
+
+
+
+
+
+
+
