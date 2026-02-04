@@ -4,7 +4,7 @@
 typedef struct TreeNode {
     char carName[20];
     int cost;
-    struct TreeNode* left;
+    struct TreeNode* left;    
     struct TreeNode* right;
 } TreeNode;
 
@@ -20,13 +20,17 @@ int main() {
     TreeNode* root;
 
     while(1){
-        printf("|-----------MENU------------|\n");
-        printf("1. 올라온 중고차 매물 확인하기\n");
-        printf("2. 중고차 매물 올리기\n");
-        printf("3. 내가 원하는 중고차 검색\n");
-        printf("4. 중고차 매물 삭제하기\n");
-        printf("|---------------------------|\n");
+        int menu;
+        Menu(root);
+        printf("메뉴를 선택해주세요. >>");
+        scanf("%d", &menu);
         
+        switch(menu){
+            case 1:
+            
+            case 2:
+            case 3:
+            case 4:
     }
 }
 
