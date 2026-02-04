@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 typedef struct TreeNode {
     char carName[20];
@@ -12,78 +13,109 @@ void Menu();
 void displayAll(TreeNode* root);
 TreeNode* findMinNode(TreeNode* node);
 TreeNode* deleteBST(TreeNode* root, int cost);
-TreeNode* insertBST(TreeNode* root, int key);
-TreeNode* searchBST(TreeNode* root, int key);
+TreeNode* createNode(char* name, int cost);
+TreeNode* insertBST(TreeNode* root, char* name, int cost);
+TreeNode* searchBST(TreeNode* root, char* name);
 
 int main() {
     printf("중고나라에 오신걸 환영합니다!\n");
     TreeNode* root = NULL;
+    char name[20];
+    int cost;
 
     while(1){
         int menu;
         Menu();
-        printf("메뉴를 선택해주세요. >>");
+        printf("메뉴를 선택해주세요. >> ");
         scanf("%d", &menu);
 
         if(menu == 0) break;
         
         switch(menu){
             case 1:
-                pritnf("\n[ 매물 목록 ]\n");
+                printf("\n[ 매물 목록 ]\n");
                 displayAll(root);
                 break;
             case 2:
-                printf("등록할 차종 이름 입력: ");
+                printf("등록할 차종 이름 입력: >> ");
                 scanf("%s", name);
-                printf("가격 입력(만원): ");
+                printf("가격 입력(만원): >> ");
                 scanf("%d", &cost);
                 
-                root = insertBST(root,name, cost);
+                root = insertBST(root, name, cost);
                 printf("성공적으로 등록되었습니다.\n");
                 break;
             case 3:
-
+                printf("검색할 차종 이름 입력: >> ");
+                scanf("%s", name);
+                TreeNode* found = searchBST(root, name);
+                if(found) printf("찾은 매물: %s, 가격: %d만원\n", found->carName, found->cost);
+                else printf("해당 매물이 없습니다.\n");
                 break;
             case 4:
-                printf("삭제할 차종 이름 입력: ");
-                scanf("%s", name);
-                printf("가격 입력(만원): ");
+                printf("삭제할 매물의 '가격' 입력: "); 
                 scanf("%d", &cost);
-                
-                deleteBST(root, cost);
-                printf("성공적으로 삭제되었습니다.\n");
+                root = deleteBST(root, cost);
+                printf("처리가 완료되었습니다.\n");
                 break;
             case 0:
-                printf("앱을 종료합니다.\n");
+                printf("프로그램을 종료합니다.\n");
                 break;
             default: printf("잘못된 선택입니다.\n");
+        }
     }
     return 0;
 }
 
 void Menu(){
-    printf("|-----------MENU------------|\n");
-    printf("1. 올라온 중고차 매물 확인하기\n");
-    printf("2. 중고차 매물 올리기\n");
-    printf("3. 내가 원하는 중고차 검색\n");
-    printf("4. 중고차 매물 삭제하기\n");
-    printf("0. 종료\n");
-    printf("|---------------------------|\n");
-
+    printf("|------------MENU-------------|\n");
+    printf(" 1. 올라온 중고차 매물 확인하기\n");
+    printf(" 2. 중고차 매물 올리기\n");
+    printf(" 3. 내가 원하는 중고차 검색\n");
+    printf(" 4. 중고차 매물 삭제하기\n");
+    printf(" 0. 종료\n");
+    printf("|-----------------------------|\n");
 }
+
+void displayAll(TreeNode* root){
+    if(root != NULL){   
+        displayAll(root->left);
+        printf("차종: %-10s | 가격: %d만원\n", root->carName, root->cost);
+        displayAll(root->right);
+    }
+}
+
+TreeNode* findMinNode(TreeNode* node){
+    TreeNode* current = node;
+    while(current && current->left != NULL)
+        current = current->left;
+    return current;
+}
+
 TreeNode* createNode(char* name, int cost) {
     TreeNode* newNode = (TreeNode*)malloc(sizeof(TreeNode));
     strcpy(newNode->carName, name);
     newNode->cost = cost;
     newNode->left = NULL;
     newNode->right = NULL;
+    
     return newNode;
 }
 
-//삭제
+TreeNode* insertBST(TreeNode* root, char* name, int cost) {
+    if (root == NULL) return createNode(name, cost);
+
+    if (key < root->cost) {
+        root->left = insertBST(root->left, name, cost);
+    } else if (cost > root->cost) {
+        root->right = insertBST(root->right, name, cost);
+    }
+    return root;
+}
+ 
 TreeNode* deleteBST(TreeNode* root, int cost) {
     if (root == NULL) return root;
-    //2.삭제할 노드 찾기
+    
     if (cost < root->cost)
         root->left = deleteBST(root->left, cost);
     else if (cost > root->cost)
@@ -102,10 +134,16 @@ TreeNode* deleteBST(TreeNode* root, int cost) {
         }
         TreeNode* temp = findMinNode(root->right);
         root->cost = temp->cost;
-        
+        strcpy(root->carName, temp->carName);
         root->right = deleteBST(root->right,temp->cost);
     }
     return root;
 }
 
+TreeNode* searchBST(TreeNode* root, char* name){
+    if(root == NULL || strcmp(root->carName, name) == 0) return root;
+    TreeNode* result = searchBST(root->left, name);
+    if(result) return result;
+    return searchBST(root->right, name);
+}
 
